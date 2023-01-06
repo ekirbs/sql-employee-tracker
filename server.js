@@ -61,24 +61,59 @@ const mainMenu = () => {
     ]
   })
   .then((answer) => {
-    if (answer.main === "View All Employees") {
-      viewEmployees();
-    } else if (answer.main === "Add Employee") {
-      addEmployee();
-    } else if (answer.main === "Update Employee Role") {
-      updateRole();
-    } else if (answer.main === "View All Roles") {
-      viewRoles();
-    } else if (answer.main === "Add Role") {
-      addRole();
-    } else if (answer.main === "View All Departments") {
-      viewDepartments();
-    } else if (answer.main === "Add Department") {
-      addDepartment();
-    } else {
-      db.end();
-    };
-  });
+    switch (answer.action) {
+      case "View All Employees":
+        viewEmployees();
+        break;
+
+      case "Add Employee":
+        addEmployee();
+        break;
+
+      case "Update Employee Role":
+        updateRole();
+        break;
+
+      case "View All Roles":
+        viewRoles();
+        break;
+
+      case "Add Role":
+        addRole();
+        break;
+
+      case "View All Departments":
+        viewDepartments();
+        break;
+
+      case "Add Department":
+        addDepartment();
+        break;
+
+      case "Quit":
+        db.end();
+        break;
+    }
+  })
+  // .then((answer) => {
+  //   if (answer.main === "View All Employees") {
+  //     viewEmployees();
+  //   } else if (answer.main === "Add Employee") {
+  //     addEmployee();
+  //   } else if (answer.main === "Update Employee Role") {
+  //     updateRole();
+  //   } else if (answer.main === "View All Roles") {
+  //     viewRoles();
+  //   } else if (answer.main === "Add Role") {
+  //     addRole();
+  //   } else if (answer.main === "View All Departments") {
+  //     viewDepartments();
+  //   } else if (answer.main === "Add Department") {
+  //     addDepartment();
+  //   } else {
+  //     db.end();
+  //   };
+  // });
 };
 
 // VIEW ALL EMPLOYEES
@@ -91,6 +126,7 @@ const viewEmployees = () => {
   FROM employee
   JOIN role ON role.id = employee.role_id
   JOIN department ON department.id = role.department_id`;
+
   db.query(emp, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -144,6 +180,7 @@ const addEmployee = () => {
     const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
     VALUES (?, ?, ?, ?)`;
     const params = [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager];
+
     db.query(newEmp, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -179,6 +216,7 @@ const updateRole = () => {
   SET role_id=?
   WHERE id=?`;
   const params = [answer.role, answer.employee_id];
+
   db.query(updateRole, params, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -194,6 +232,7 @@ const viewRoles = () => {
   const role = `SELECT *
   FROM role
   JOIN department ON department.id = role.department_id`;
+
   db.query(role, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -233,6 +272,7 @@ const addRole = () => {
     const newRole = `INSERT INTO role (title, salary, department_id)
     VALUES (?, ?, ?)`;
     const params = [answer.newTitle, answer.newSalary, answer.dept];
+
     db.query(newRole, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -247,6 +287,7 @@ const addRole = () => {
 // VIEW ALL DEPARTMENTS
 const viewDepartments = () => {
   const dep = `SELECT * FROM department`;
+
   db.query(dep, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -270,6 +311,7 @@ const addDepartment = () => {
     const newDept = `INSERT INTO department (name)
     VALUES (?)`
     const params = [answer.newDeptName];
+
     db.query(newDept, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
