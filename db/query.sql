@@ -1,22 +1,26 @@
 SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
 FROM employee
 JOIN role ON role.id = employee.role_id
-JOIN department ON department.id = role.department_id
+JOIN department ON department.id = role.department_id;
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES (?, ?, ?, ?)
+VALUES (?, ?, ?, ?);
+
+UPDATE employee
+SET role_id=?
+WHERE id=?;
 
 SELECT *
 FROM role
-JOIN department ON department.id = role.department_id
+JOIN department ON department.id = role.department_id;
 
 INSERT INTO role (title, salary, department_id)
-VALUES (?, ?, ?)
+VALUES (?, ?, ?);
 
 SELECT * FROM department;
 
 INSERT INTO department (name)
-VALUES (?)
+VALUES (?);
 
 
 
@@ -45,7 +49,7 @@ inquirer.prompt([{
     getStuff();
   }
 })
-dbquery('select ??, ?? from employee where ?? = ?', [getConstraint(), 2ndConstraint, 2ndConstraint, 'pablo'"])
+db.query('select ??, ?? from employee where ?? = ?', [getConstraint(), 2ndConstraint, 2ndConstraint, 'pablo'"])
 select first_name, last_name from employee where last_name = "pablo"
 -- ?? is column name, ? is data point
 

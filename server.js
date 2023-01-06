@@ -68,7 +68,6 @@ const viewEmployees = () => {
       res.status(500).json({ error: err.message });
       return;
     }
-    console.log("")
     console.table(res);
     mainMenu();
   });
@@ -88,19 +87,33 @@ const addEmployee = () => {
       name: "newLastName"
     },
     {
-      type: "input",
-      message: "Enter the new Employee's job id.",
-      name: "newId"
+      type: "list",
+      message: "Enter the new Employee's role.",
+      name: "newRole",
+      choices: [
+        "Sales Lead",
+        "Salesperson",
+        "Lead Engineer",
+        "Software Engineer",
+        "Account Manager",
+        "Accountant",
+        "Legal Team Lead",
+        "Lawyer"
+      ]
     },
     {
-      type: "input",
-      message: "Enter the new Employee's Manager id.",
-      name: "newManagerId"
+      type: "list",
+      message: "Enter the new Employee's Manager.",
+      name: "newManager",
+      choices: [
+
+      ]
     }
   ])
   .then(answer => {
-    const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`
-    db.query(newEmp, [answer.newFirstName, answer.newLastName, answer.newId, answer.newManagerId], (err, res) => {
+    const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+    VALUES (?, ?, ?, ?)`;
+    db.query(newEmp, [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager], (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -113,7 +126,27 @@ const addEmployee = () => {
 
 // UPDATE EMPLOYEE ROLE
 const updateRole = () => {
-  const updateRole = `UPDATE`;
+  inquirer.prompt([
+    {
+      type: "list",
+      message: "Which employee's role would you like to update?",
+      name: "empToChange",
+      choices: [
+
+      ]
+    },
+    {
+      type: "list",
+      message: "Enter the role you'd like to assign to the selected employee.",
+      name: "empRole",
+      choices: [
+        
+      ]
+    }
+  ])
+  const updateRole = `UPDATE employee
+  SET role_id=?
+  WHERE id=?`;
   db.query(updateRole, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -126,7 +159,9 @@ const updateRole = () => {
 
 // VIEW ALL ROLES
 const viewRoles = () => {
-  const role = `SELECT * FROM role`;
+  const role = `SELECT *
+  FROM role
+  JOIN department ON department.id = role.department_id`;
   db.query(role, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -157,7 +192,8 @@ const addRole = () => {
     }
   ])
   .then(answer => {
-    const newRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`
+    const newRole = `INSERT INTO role (title, salary, department_id)
+    VALUES (?, ?, ?)`
     db.query(newRole, [answer.newTitle, answer.newSalary, answer.deptId], (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -192,7 +228,8 @@ const addDepartment = () => {
     }
   ])
   .then(answer => {
-    const newDept = `INSERT INTO department (name) VALUES (?)`
+    const newDept = `INSERT INTO department (name)
+    VALUES (?)`
     db.query(newDept, [answer.newDeptName], (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
