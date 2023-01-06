@@ -1,4 +1,12 @@
-SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
+SELECT employee.id AS ID,
+employee.first_name AS "First Name",
+employee.last_name AS "Last Name",
+role.title AS "Title",
+department.name AS "Department",
+role.salary AS "Salary",
+CASE employee.manager_id
+THEN CONCAT (employee.first_name," ", employee.last_name) AS "Manager"
+-- employee.manager_id AS "Manager"
 FROM employee
 JOIN role ON role.id = employee.role_id
 JOIN department ON department.id = role.department_id;

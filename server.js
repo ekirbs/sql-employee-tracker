@@ -2,6 +2,10 @@ const mysql = require("mysql2");
 const inquirer = require("inquirer");
 require("console.table");
 
+const logo = require('asciiart-logo');
+// const config = require('./package.json');
+// console.log(logo(config).render());
+
 // DATABASE CONNECTION
 const db = mysql.createConnection(
   {
@@ -12,12 +16,30 @@ const db = mysql.createConnection(
     database: 'company_db'
   },
   console.log(`Connected to the company_db database.`)
-)
+);
 // .promise();
 
 db.connect(err => {
   if (err) throw err;
   console.log("Connected to Employee Tracker.");
+
+  console.log(
+    logo({
+      name: 'SQL EMPLOYEE TRACKER!!',
+        font: 'Doom',
+        lineChars: 10,
+        padding: 2,
+        margin: 3,
+        borderColor: 'yellow',
+        logoColor: 'bold-cyan',
+        textColor: 'bold-green',
+      })
+      .emptyLine()
+      .right('by eKirbs')
+    .emptyLine()
+    .render()
+  );
+
   mainMenu();
 });
 
@@ -61,6 +83,10 @@ const mainMenu = () => {
 
 // VIEW ALL EMPLOYEES
 const viewEmployees = () => {
+  // const emp = `SELECT employee.id AS "ID", employee.first_name AS "First Name", employee.last_name AS "Last Name", role.title AS "Title", department.name AS "Department", role.salary AS "Salary", CASE employee.manager_id WHEN employee.manager_id THEN CONCAT (employee.first_name," ", employee.last_name) AS "Manager"
+  // FROM employee
+  // JOIN role ON role.id = employee.role_id
+  // JOIN department ON department.id = role.department_id`;
   const emp = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
   FROM employee
   JOIN role ON role.id = employee.role_id
@@ -117,7 +143,8 @@ const addEmployee = () => {
   .then(answer => {
     const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
     VALUES (?, ?, ?, ?)`;
-    db.query(newEmp, [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager], (err, res) => {
+    const params = [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager];
+    db.query(newEmp, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -151,7 +178,8 @@ const updateRole = () => {
   const updateRole = `UPDATE employee
   SET role_id=?
   WHERE id=?`;
-  db.query(updateRole, [answer.role, answer.employee_id], (err, res) => {
+  const params = [answer.role, answer.employee_id];
+  db.query(updateRole, params, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -178,6 +206,9 @@ const viewRoles = () => {
 
 // ADD ROLE
 const addRole = () => {
+  db.query(
+    `SELECT department.id AS "ID", department.name AS "Department", role.title AS "Role", role.salary AS "Salary", department_id AS ""`
+  )
   inquirer.prompt([
     {
       type: "input",
@@ -200,8 +231,9 @@ const addRole = () => {
   ])
   .then(answer => { // department_id below?  how to change to department_id from name
     const newRole = `INSERT INTO role (title, salary, department_id)
-    VALUES (?, ?, ?)`
-    db.query(newRole, [answer.newTitle, answer.newSalary, answer.dept], (err, res) => {
+    VALUES (?, ?, ?)`;
+    const params = [answer.newTitle, answer.newSalary, answer.dept];
+    db.query(newRole, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -237,7 +269,8 @@ const addDepartment = () => {
   .then(answer => {
     const newDept = `INSERT INTO department (name)
     VALUES (?)`
-    db.query(newDept, [answer.newDeptName], (err, res) => {
+    const params = [answer.newDeptName];
+    db.query(newDept, params, (err, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -247,13 +280,3 @@ const addDepartment = () => {
     })
   });
 };
-
-// // Default response for any other request (Not Found)
-// app.use((req, res) => {
-//   res.status(404).end();
-// });
-
-// // LISTENER
-// app.listen(PORT, () => {
-//   console.log(`App listening at http://localhost:${PORT} 🚀`);
-//   });
