@@ -19,6 +19,7 @@ db.connect(err => {
   startMenu();
 });
 
+// MAIN MENU
 mainMenu = () => {
   inquirer.prompt({
     type: "list",
@@ -56,6 +57,7 @@ mainMenu = () => {
   });
 };
 
+// VIEW ALL EMPLOYEES
 const viewEmployees = () => {
   const emp = `SELECT * FROM employee`;
   db.query(emp, (err, res) => {
@@ -63,11 +65,52 @@ const viewEmployees = () => {
       res.status(500).json({ error: err.message });
       return;
     }
+    console.log("")
     console.table(res);
     mainMenu();
   });
 };
 
+// ADD EMPLOYEE
+const addEmployee = () => {
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the new Employee's first name.",
+      name: "newFirstName"
+    },
+    {
+      type: "input",
+      message: "Enter the new Employee's last name.",
+      name: "newLastName"
+    },
+    {
+      type: "input",
+      message: "Enter the new Employee's job id.",
+      name: "newId"
+    },
+    {
+      type: "input",
+      message: "Enter the new Employee's Manager id.",
+      name: "newManagerId"
+    }
+  ])
+  .then(answer => {
+    const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`
+    db.query(newEmp, [answer.newFirstName, answer.newLastName, answer.newId, answer.newManagerId], (err, res) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      console.log("New Employee added.");
+      mainMenu();
+    })
+  });
+};
+
+// UPDATE EMPLOYEE ROLE
+
+// VIEW ALL ROLES
 const viewRoles = () => {
   const rol = `SELECT * FROM role`;
   db.query(rol, (err, res) => {
@@ -80,6 +123,9 @@ const viewRoles = () => {
   });
 };
 
+// ADD ROLE
+
+// VIEW ALL DEPARTMENTS
 const viewDepartments = () => {
   const dep = `SELECT * FROM department`;
   db.query(dep, (err, res) => {
@@ -91,6 +137,24 @@ const viewDepartments = () => {
     mainMenu();
   });
 };
+
+// ADD DEPARTMENT
+
+// Default response for any other request (Not Found)
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+// LISTENER
+app.listen(PORT, () => {
+  console.log(`App listening at http://localhost:${PORT} 🚀`);
+  });
+
+
+
+
+  
+
 
 // Create an Employee
 app.post('/api/new-employee', ({ body }, res) => {
@@ -185,15 +249,15 @@ app.put('/api/review/:id', (req, res) => {
   });
 });
 
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
+// // Default response for any other request (Not Found)
+// app.use((req, res) => {
+//   res.status(404).end();
+// });
 
-// LISTENER
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT} 🚀`);
-  });
+// // LISTENER
+// app.listen(PORT, () => {
+//   console.log(`App listening at http://localhost:${PORT} 🚀`);
+//   });
 
 // const getQuery = 'SELECT name FROM movies';
 // const getReviewQuery = "SELECT * FROM reviews JOIN movies ON movies.id = reviews.movie_id;";
