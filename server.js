@@ -59,7 +59,10 @@ mainMenu = () => {
 
 // VIEW ALL EMPLOYEES
 const viewEmployees = () => {
-  const emp = `SELECT * FROM employee`;
+  const emp = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
+  FROM employee
+  JOIN role ON role.id = employee.role_id
+  JOIN department ON department.id = role.department_id`;
   db.query(emp, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -102,18 +105,29 @@ const addEmployee = () => {
         res.status(500).json({ error: err.message });
         return;
       }
-      console.log("New Employee added.");
+      console.log("New employee added.");
       mainMenu();
     })
   });
 };
 
 // UPDATE EMPLOYEE ROLE
+const updateRole = () => {
+  const updateRole = `UPDATE`;
+  db.query(updateRole, (err, res) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    console.table(res);
+    mainMenu();
+  });
+};
 
 // VIEW ALL ROLES
 const viewRoles = () => {
-  const rol = `SELECT * FROM role`;
-  db.query(rol, (err, res) => {
+  const role = `SELECT * FROM role`;
+  db.query(role, (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -124,6 +138,36 @@ const viewRoles = () => {
 };
 
 // ADD ROLE
+const addRole = () => {
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the title of the new role.",
+      name: "newTitle"
+    },
+    {
+      type: "input",
+      message: "Enter the salary of the new role.",
+      name: "newSalary"
+    },
+    {
+      type: "input",
+      message: "Enter the department that the new role belongs to.",
+      name: "deptId"
+    }
+  ])
+  .then(answer => {
+    const newRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`
+    db.query(newRole, [answer.newTitle, answer.newSalary, answer.deptId], (err, res) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      console.log("New role added.");
+      mainMenu();
+    })
+  });
+};
 
 // VIEW ALL DEPARTMENTS
 const viewDepartments = () => {
@@ -139,6 +183,26 @@ const viewDepartments = () => {
 };
 
 // ADD DEPARTMENT
+const addDepartment = () => {
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the name of the new department.",
+      name: "newDeptName"
+    }
+  ])
+  .then(answer => {
+    const newDept = `INSERT INTO department (name) VALUES (?)`
+    db.query(newDept, [answer.newDeptName], (err, res) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      console.log("New department added.");
+      mainMenu();
+    })
+  });
+};
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
@@ -153,7 +217,7 @@ app.listen(PORT, () => {
 
 
 
-  
+
 
 
 // Create an Employee

@@ -1,15 +1,22 @@
-SELECT * FROM employee;
+SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
+FROM employee
+JOIN role ON role.id = employee.role_id
+JOIN department ON department.id = role.department_id
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES (?, ?, ?, ?)
 
-SELECT * FROM role;
+SELECT *
+FROM role
+JOIN department ON department.id = role.department_id
 
-INSERT INTO role ()
+INSERT INTO role (title, salary, department_id)
+VALUES (?, ?, ?)
 
 SELECT * FROM department;
 
-INSERT INTO department (dept_name)
+INSERT INTO department (name)
+VALUES (?)
 
 
 
@@ -17,6 +24,12 @@ INSERT INTO department (dept_name)
 SELECT movies.movie_name AS movie, reviews.review
 FROM reviews
 JOIN movies ON movies.id = reviews.movie_id;
+
+SELECT favorite_books.book_name AS name, book_prices.price AS price
+FROM favorite_books
+JOIN book_prices ON favorite_books.book_price = book_prices.id;
+
+
 
 function getConstraint() {
   return 'first_name'
