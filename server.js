@@ -12,16 +12,17 @@ const db = mysql.createConnection(
     database: 'company_db'
   },
   console.log(`Connected to the company_db database.`)
-).promise();
+)
+// .promise();
 
 db.connect(err => {
   if (err) throw err;
   console.log("Connected to Employee Tracker.");
-  startMenu();
+  mainMenu();
 });
 
 // MAIN MENU
-mainMenu = () => {
+const mainMenu = () => {
   inquirer.prompt({
     type: "list",
     message: "Choose an activity.",
@@ -96,7 +97,9 @@ const addEmployee = () => {
       type: "list",
       message: "Enter the new Employee's role.",
       name: "newRole",
-      choices: roleOptions
+      choices: [
+      ]
+      // roleOptions
       // choices: await employeeRoles(),
       // when(answers) {
       //   return answers.task === 
@@ -148,7 +151,7 @@ const updateRole = () => {
   const updateRole = `UPDATE employee
   SET role_id=?
   WHERE id=?`;
-  db.query(updateRole, (err, res) => {
+  db.query(updateRole, [answer.role, answer.employee_id], (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -245,12 +248,12 @@ const addDepartment = () => {
   });
 };
 
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
+// // Default response for any other request (Not Found)
+// app.use((req, res) => {
+//   res.status(404).end();
+// });
 
-// LISTENER
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT} 🚀`);
-  });
+// // LISTENER
+// app.listen(PORT, () => {
+//   console.log(`App listening at http://localhost:${PORT} 🚀`);
+//   });
