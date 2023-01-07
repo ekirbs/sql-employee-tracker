@@ -22,7 +22,10 @@ SET role_id = ?
 WHERE id = ?;
 
 -- VIEW ALL ROLES
-SELECT *
+SELECT role.id AS "ID",
+role.title AS "Title",
+department.name AS "Department",
+role.salary AS "Salary"
 FROM role
 JOIN department ON department.id = role.department_id;
 
@@ -31,7 +34,9 @@ INSERT INTO role (title, salary, department_id)
 VALUES (?, ?, ?);
 
 -- VIEW ALL DEPARTMENTS
-SELECT * FROM department;
+SELECT department.id AS "ID",
+department.name AS "Department"
+ FROM department;
 
 -- ADD DEPARTMENT
 INSERT INTO department (name)

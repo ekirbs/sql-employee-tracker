@@ -15,7 +15,11 @@ Link: [MySQL Employee Tracker](https://github.com/ekirbs/sql-employee-tracker 'A
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+* Uses the [Inquirer package](https://www.npmjs.com/package/inquirer/v/8.2.4).
+
+* Uses the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database.
+
+* Uses the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
 
 ## Usage
 

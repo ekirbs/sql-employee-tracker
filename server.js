@@ -180,7 +180,10 @@ const updateRole = () => {
 
 // VIEW ALL ROLES
 const viewRoles = () => {
-  const role = `SELECT *
+  const role = `SELECT role.id AS "ID",
+  role.title AS "Title",
+  department.name AS "Department",
+  role.salary AS "Salary"
   FROM role
   JOIN department ON department.id = role.department_id`;
 
@@ -226,7 +229,9 @@ const addRole = () => {
 
 // VIEW ALL DEPARTMENTS
 const viewDepartments = () => {
-  const dep = `SELECT * FROM department`;
+  const dep = `SELECT department.id AS "ID",
+  department.name AS "Department"
+   FROM department`;
 
   db.query(dep, (err, res) => {
     if (err) throw err;
