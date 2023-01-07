@@ -166,15 +166,18 @@ const updateRole = () => {
       name: "empRole"
     }
   ])
-  const updateRole = `UPDATE employee
-  SET role_id = ?
-  WHERE id = ?`;
-  const params = [answer.empToChange, answer.empRole];
+  .then(answer => {
+    const updateRole = `UPDATE employee
+    SET role_id = ?
+    WHERE id = ?`;
+    const params = [answer.empRole, answer.empToChange];
 
-  db.query(updateRole, params, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    mainMenu();
+    db.query(updateRole, params, (err, res) => {
+      if (err) throw err;
+      console.log("Employee role update.");
+      console.table(res);
+      mainMenu();
+    })
   });
 };
 
