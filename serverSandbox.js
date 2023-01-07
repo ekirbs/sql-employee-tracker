@@ -1,4 +1,29 @@
-// Create an Employee
+  // .then((answer) => {
+  //   if (answer.main === "View All Employees") {
+  //     viewEmployees();
+  //   } else if (answer.main === "Add Employee") {
+  //     addEmployee();
+  //   } else if (answer.main === "Update Employee Role") {
+  //     updateRole();
+  //   } else if (answer.main === "View All Roles") {
+  //     viewRoles();
+  //   } else if (answer.main === "Add Role") {
+  //     addRole();
+  //   } else if (answer.main === "View All Departments") {
+  //     viewDepartments();
+  //   } else if (answer.main === "Add Department") {
+  //     addDepartment();
+  //   } else {
+  //     db.end();
+  //   };
+  // });
+
+  if (err) {
+    res.status(500).json({ error: err.message });
+    return;
+  }
+  
+  // Create an Employee
 app.post('/api/new-employee', ({ body }, res) => {
   const sql = `INSERT INTO movies (movie_name)
     VALUES (?)`;

@@ -1,10 +1,8 @@
+// DEPENDENCIES
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-require("console.table");
-
 const logo = require('asciiart-logo');
-// const config = require('./package.json');
-// console.log(logo(config).render());
+require("console.table");
 
 // DATABASE CONNECTION
 const db = mysql.createConnection(
@@ -17,7 +15,6 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the company_db database.`)
 );
-// .promise();
 
 db.connect(err => {
   if (err) throw err;
@@ -95,25 +92,6 @@ const mainMenu = () => {
         break;
     }
   })
-  // .then((answer) => {
-  //   if (answer.main === "View All Employees") {
-  //     viewEmployees();
-  //   } else if (answer.main === "Add Employee") {
-  //     addEmployee();
-  //   } else if (answer.main === "Update Employee Role") {
-  //     updateRole();
-  //   } else if (answer.main === "View All Roles") {
-  //     viewRoles();
-  //   } else if (answer.main === "Add Role") {
-  //     addRole();
-  //   } else if (answer.main === "View All Departments") {
-  //     viewDepartments();
-  //   } else if (answer.main === "Add Department") {
-  //     addDepartment();
-  //   } else {
-  //     db.end();
-  //   };
-  // });
 };
 
 // VIEW ALL EMPLOYEES
