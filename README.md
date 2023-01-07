@@ -29,6 +29,10 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ![Tutorial GIF.](./public/assets/images/tutor-gif.gif)
 
+[![Tutorial](./assets/images/tutor-img.png)](https://user-images.githubusercontent.com/117387546/211132370-21b4a2f1-01a2-45f3-9a4b-5b665ce991c4.mp4)
+
+
+
 ## Credits
 
 Special thanks to the Web Dev Simplified Youtube channel!
