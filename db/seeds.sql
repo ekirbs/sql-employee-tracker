@@ -1,3 +1,4 @@
+-- POPULATE TABLES
 INSERT INTO department (name)
 VALUES ("Engineering"),
        ("Finance"),

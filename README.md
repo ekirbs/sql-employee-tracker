@@ -23,17 +23,9 @@ Link: [MySQL Employee Tracker](https://github.com/ekirbs/sql-employee-tracker 'A
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+Once all the required dependencies are installed, start the program by entering "node server" or "npm start" in the terminal.  The title logo will render and a main menu will appear.  Use the up and down arrows to navigate through the menu.  Press enter to choose the option you want.  If you choose to VIEW something, a table will appear with the desired information.  If you choose to ADD something, you will be prompted to enter information into the fields.  Once done, the information will be added to the database.  Enjoy!
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
-
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
-
-![Tutorial GIF.](./public/assets/images/tutor-gif.gif)
-
-[![Tutorial](./assets/images/tutor-img.png)](https://user-images.githubusercontent.com/117387546/211132370-21b4a2f1-01a2-45f3-9a4b-5b665ce991c4.mp4)
+[![Tutorial](./assets/images/sql-tutor-img.png)](https://user-images.githubusercontent.com/117387546/211132370-21b4a2f1-01a2-45f3-9a4b-5b665ce991c4.mp4)
 
 
 
