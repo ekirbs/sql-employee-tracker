@@ -61,7 +61,7 @@ const mainMenu = () => {
     ]
   })
   .then((answer) => {
-    switch (answer.action) {
+    switch (answer.main) {
       case "View All Employees":
         viewEmployees();
         break;
@@ -186,6 +186,7 @@ const addEmployee = () => {
         res.status(500).json({ error: err.message });
         return;
       }
+      // if (err) throw err;
       console.log("New employee added.");
       mainMenu();
     })
@@ -222,6 +223,7 @@ const updateRole = () => {
       res.status(500).json({ error: err.message });
       return;
     }
+    // if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -238,6 +240,7 @@ const viewRoles = () => {
       res.status(500).json({ error: err.message });
       return;
     }
+    // if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -255,7 +258,7 @@ const addRole = () => {
       name: "newTitle"
     },
     {
-      type: "input",
+      type: "number",
       message: "Enter the salary of the new role.",
       name: "newSalary"
     },
@@ -278,6 +281,7 @@ const addRole = () => {
         res.status(500).json({ error: err.message });
         return;
       }
+      // if (err) throw err;
       console.log("New role added.");
       mainMenu();
     })
@@ -293,6 +297,7 @@ const viewDepartments = () => {
       res.status(500).json({ error: err.message });
       return;
     }
+    // if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -317,6 +322,7 @@ const addDepartment = () => {
         res.status(500).json({ error: err.message });
         return;
       }
+      // if (err) throw err;
       console.log("New department added.");
       mainMenu();
     })
