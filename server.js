@@ -96,21 +96,19 @@ const mainMenu = () => {
 
 // VIEW ALL EMPLOYEES
 const viewEmployees = () => {
-  // const emp = `SELECT employee.id AS "ID", employee.first_name AS "First Name", employee.last_name AS "Last Name", role.title AS "Title", department.name AS "Department", role.salary AS "Salary", CASE employee.manager_id WHEN employee.manager_id THEN CONCAT (employee.first_name," ", employee.last_name) AS "Manager"
-  // FROM employee
-  // JOIN role ON role.id = employee.role_id
-  // JOIN department ON department.id = role.department_id`;
-  const emp = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
+  const emp = `SELECT employee.id AS "ID",
+  employee.first_name AS "First Name",
+  employee.last_name AS "Last Name",
+  role.title AS "Title",
+  department.name AS "Department",
+  role.salary AS "Salary",
+  employee.manager_id AS "Manager"
   FROM employee
   JOIN role ON role.id = employee.role_id
-  JOIN department ON department.id = role.department_id`;
+  JOIN department ON department.id = role.department_id;`;
 
   db.query(emp, (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    // if (err) throw err;
+    if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -118,10 +116,6 @@ const viewEmployees = () => {
 
 // ADD EMPLOYEE
 const addEmployee = () => {
-  // const roleOptions = res.map(({ id, title, salary }) => ({
-  //   value: id, title: `${title}`, salary: `${salary}`
-  // }));
-
   inquirer.prompt([
     {
       type: "input",
@@ -134,24 +128,14 @@ const addEmployee = () => {
       name: "newLastName"
     },
     {
-      type: "list",
-      message: "Enter the new Employee's role.",
-      name: "newRole",
-      choices: [
-      ]
-      // roleOptions
-      // choices: await employeeRoles(),
-      // when(answers) {
-      //   return answers.task === 
-      // }
+      type: "number",
+      message: "Enter the new Employee's role ID #.",
+      name: "newRole"
     },
     {
-      type: "list",
-      message: "Enter the new Employee's Manager.",
-      name: "newManager",
-      choices: [
-
-      ]
+      type: "number",
+      message: "Enter the new Employee's Manager ID #.",
+      name: "newManager"
     }
   ])
   .then(answer => {
@@ -160,12 +144,9 @@ const addEmployee = () => {
     const params = [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager];
 
     db.query(newEmp, params, (err, res) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      // if (err) throw err;
+      if (err) throw err;
       console.log("New employee added.");
+      console.table(res);
       mainMenu();
     })
   });
@@ -175,33 +156,23 @@ const addEmployee = () => {
 const updateRole = () => {
   inquirer.prompt([
     {
-      type: "list",
-      message: "Which employee's role would you like to update?",
-      name: "empToChange",
-      choices: [
-
-      ]
+      type: "number",
+      message: "Enter the ID # of the employee who's role would you like to update.",
+      name: "empToChange"
     },
     {
-      type: "list",
-      message: "Enter the role you'd like to assign to the selected employee.",
-      name: "empRole",
-      choices: [
-
-      ]
+      type: "number",
+      message: "Enter the role ID # you'd like to assign to the selected employee.",
+      name: "empRole"
     }
   ])
   const updateRole = `UPDATE employee
-  SET role_id=?
-  WHERE id=?`;
-  const params = [answer.role, answer.employee_id];
+  SET role_id = ?
+  WHERE id = ?`;
+  const params = [answer.empToChange, answer.empRole];
 
   db.query(updateRole, params, (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    // if (err) throw err;
+    if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -214,11 +185,7 @@ const viewRoles = () => {
   JOIN department ON department.id = role.department_id`;
 
   db.query(role, (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    // if (err) throw err;
+    if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -226,9 +193,6 @@ const viewRoles = () => {
 
 // ADD ROLE
 const addRole = () => {
-  db.query(
-    `SELECT department.id AS "ID", department.name AS "Department", role.title AS "Role", role.salary AS "Salary", department_id AS ""`
-  )
   inquirer.prompt([
     {
       type: "input",
@@ -241,26 +205,20 @@ const addRole = () => {
       name: "newSalary"
     },
     {
-      type: "list",
-      message: "Enter the department that the new role belongs to.",
-      name: "dept",
-      choices: [
-
-      ]
+      type: "number",
+      message: "Enter the department ID # that the new role belongs to.",
+      name: "dept"
     }
   ])
-  .then(answer => { // department_id below?  how to change to department_id from name
+  .then(answer => {
     const newRole = `INSERT INTO role (title, salary, department_id)
     VALUES (?, ?, ?)`;
     const params = [answer.newTitle, answer.newSalary, answer.dept];
 
     db.query(newRole, params, (err, res) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      // if (err) throw err;
+      if (err) throw err;
       console.log("New role added.");
+      console.table(res);
       mainMenu();
     })
   });
@@ -271,11 +229,7 @@ const viewDepartments = () => {
   const dep = `SELECT * FROM department`;
 
   db.query(dep, (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    // if (err) throw err;
+    if (err) throw err;
     console.table(res);
     mainMenu();
   });
@@ -296,12 +250,9 @@ const addDepartment = () => {
     const params = [answer.newDeptName];
 
     db.query(newDept, params, (err, res) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      // if (err) throw err;
+      if (err) throw err;
       console.log("New department added.");
+      console.table(res);
       mainMenu();
     })
   });

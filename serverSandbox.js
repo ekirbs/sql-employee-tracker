@@ -22,6 +22,23 @@
     res.status(500).json({ error: err.message });
     return;
   }
+
+  db.query(
+    `SELECT department.id AS "ID", department.name AS "Department", role.title AS "Role", role.salary AS "Salary", department_id AS ""`
+  )
+
+   // const roleOptions = res.map(({ id, title, salary }) => ({
+  //   value: id, title: `${title}`, salary: `${salary}`
+  // }));
+
+
+  choices: [
+  ]
+  // roleOptions
+  // choices: await employeeRoles(),
+  // when(answers) {
+  //   return answers.task === 
+  // }
   
   // Create an Employee
 app.post('/api/new-employee', ({ body }, res) => {

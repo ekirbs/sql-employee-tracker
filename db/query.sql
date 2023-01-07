@@ -1,3 +1,55 @@
+-- VIEW ALL EMPLOYEES
+SELECT employee.id AS "ID",
+employee.first_name AS "First Name",
+employee.last_name AS "Last Name",
+role.title AS "Title",
+department.name AS "Department",
+role.salary AS "Salary",
+-- CASE employee.manager_id
+-- THEN CONCAT (employee.first_name," ", employee.last_name) AS "Manager"
+employee.manager_id AS "Manager"
+FROM employee
+JOIN role ON role.id = employee.role_id
+JOIN department ON department.id = role.department_id;
+
+-- ADD EMPLOYEE
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES (?, ?, ?, ?);
+
+-- UPDATE EMPLOYEE ROLE
+UPDATE employee
+SET role_id = ?
+WHERE id = ?;
+
+-- VIEW ALL ROLES
+SELECT *
+FROM role
+JOIN department ON department.id = role.department_id;
+
+-- ADD ROLE
+INSERT INTO role (title, salary, department_id)
+VALUES (?, ?, ?);
+
+-- VIEW ALL DEPARTMENTS
+SELECT * FROM department;
+
+-- ADD DEPARTMENT
+INSERT INTO department (name)
+VALUES (?);
+
+
+
+DELETE FROM employee
+WHERE id = ?;
+
+DELETE FROM department
+WHERE id = ?;
+
+DELETE FROM role
+WHERE id = ?;
+
+
+
 SELECT e.id AS ID,
 e.first_name AS "First Name",
 e.last_name AS "Last Name",
@@ -12,37 +64,3 @@ LEFT JOIN role return
 ON e.role_id = r.title
 LEFT JOIN department d
 ON r.department_id = d.id
-
-
-
--- SELECT employee.id AS ID,
--- employee.first_name AS "First Name",
--- employee.last_name AS "Last Name",
--- role.title AS "Title",
--- department.name AS "Department",
--- role.salary AS "Salary",
--- -- CASE employee.manager_id
--- -- THEN CONCAT (employee.first_name," ", employee.last_name) AS "Manager"
--- employee.manager_id AS "Manager"
--- FROM employee
--- JOIN role ON role.id = employee.role_id
--- JOIN department ON department.id = role.department_id;
-
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES (?, ?, ?, ?);
-
-UPDATE employee
-SET role_id=?
-WHERE id=?;
-
-SELECT *
-FROM role
-JOIN department ON department.id = role.department_id;
-
-INSERT INTO role (title, salary, department_id)
-VALUES (?, ?, ?);
-
-SELECT * FROM department;
-
-INSERT INTO department (name)
-VALUES (?);
