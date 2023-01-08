@@ -26,6 +26,22 @@ class companyDatabase {
     );
   };
 
+  viewManagers() {
+    return this.connection.promise().query(
+      `SELECT employee.id AS "ID",
+      CONCAT (employee.first_name," ", employee.last_name) AS "Managers",
+      role.title AS "Title",
+      department.name AS "Department",
+      role.salary AS "Salary"
+      FROM employee
+      LEFT JOIN role
+      ON employee.role_id = role.id
+      LEFT JOIN department
+      ON role.department_id = department.id
+      WHERE employee.manager_id IS NULL;`
+    );
+  };
+
   viewRoles() {
     return this.connection.promise().query(
       `SELECT role.id AS "ID",
@@ -70,6 +86,8 @@ class companyDatabase {
       WHERE id = ?`, [role.empRole, role.empToChange]);
   };
 
+  
+
   viewRoleTitle() {
     return this.connection.promise().query(
       `SELECT role.title
@@ -77,12 +95,10 @@ class companyDatabase {
     );
   };
 
-  viewManager() {
+  deleteEmployee(employee) {
     return this.connection.promise().query(
-      `SELECT CONCAT (manager.first_name," ", manager.last_name)
-      FROM employee
-      LEFT JOIN employee manager
-      ON manager.id = employee.manager_id;`
+      `DELETE FROM employee
+      WHERE id = ?`, employee.empToDelete
     );
   };
 

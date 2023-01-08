@@ -40,12 +40,20 @@ function mainMenu() {
           value: "VIEW_EMPS"
         },
         {
+          name: "View Managers",
+          value: "VIEW_MNGRS"
+        },
+        {
           name: "Add Employee",
           value: "ADD_EMP"
         },
         {
           name: "Update Employee Role",
           value: "UPDATE_ROLE"
+        },
+        {
+          name: "Delete Employee",
+          value: "DELETE_EMP"
         },
         {
           name: "View All Roles",
@@ -74,11 +82,17 @@ function mainMenu() {
       case "VIEW_EMPS":
         viewAllEmployees();
         break;
+      case "VIEW_MNGRS":
+        viewAllManagers();
+        break;
       case "ADD_EMP":
         addNewEmployee();
         break;
       case "UPDATE_ROLE":
         updateEmpRole();
+        break;
+        case "DELETE_EMP":
+        deleteEmp();
         break;
       case "VIEW_ROLES":
         viewAllRoles();
@@ -105,6 +119,17 @@ function viewAllEmployees() {
       let employees = rows;
       console.log("\n");
       console.table(employees);
+    })
+    .then(() => mainMenu());
+};
+
+// VIEW ALL EMPLOYEES
+function viewAllManagers() {
+  connection.viewManagers()
+    .then(([rows]) => {
+      let managers = rows;
+      console.log("\n");
+      console.table(managers);
     })
     .then(() => mainMenu());
 };
@@ -164,6 +189,23 @@ function updateEmpRole() {
     let role = res;
     connection.updateRole(role)
       .then(() => console.log(`Updated role of employee ${role.empToChange} the database.`))
+      .then(() => mainMenu())
+  })
+};
+
+// DELETE EMPLOYEE
+function deleteEmp() {
+  prompt([
+    {
+      type: "number",
+      message: "Enter the ID # of the employee you'd like to delete.",
+      name: "empToDelete"
+    }
+  ])
+  .then(res => {
+    let employee = res;
+    connection.deleteEmployee(employee)
+      .then(() => console.log(`Deleted employee ${employee.id} from the database.`))
       .then(() => mainMenu())
   })
 };

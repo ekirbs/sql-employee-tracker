@@ -14,6 +14,19 @@ ON role.department_id = department.id
 LEFT JOIN employee manager
 ON manager.id = employee.manager_id;
 
+-- VIEW MANAGERS
+SELECT employee.id AS "ID",
+CONCAT (employee.first_name," ", employee.last_name) AS "Managers",
+role.title AS "Title",
+department.name AS "Department",
+role.salary AS "Salary"
+FROM employee
+LEFT JOIN role
+ON employee.role_id = role.id
+LEFT JOIN department
+ON role.department_id = department.id
+WHERE employee.manager_id IS NULL;
+
 -- ADD EMPLOYEE
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES (?, ?, ?, ?);
