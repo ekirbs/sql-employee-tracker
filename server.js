@@ -1,126 +1,122 @@
 // DEPENDENCIES
-const mysql = require("mysql2");
-const inquirer = require("inquirer");
+const { prompt } = require("inquirer");
 const logo = require('asciiart-logo');
+const connection = require("./db/index.js");
 require("console.table");
 
-// DATABASE CONNECTION
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    password: 'root',
-    database: 'company_db'
-  },
-  console.log(`Connected to the company_db database.`)
-);
-
-db.connect(err => {
-  if (err) throw err;
-  console.log("Connected to Employee Tracker.");
-
-  console.log(
-    logo({
-      name: 'SQL EMPLOYEE TRACKER!!',
-        font: 'Doom',
-        lineChars: 10,
-        padding: 2,
-        margin: 3,
-        borderColor: 'yellow',
-        logoColor: 'bold-cyan',
-        textColor: 'bold-green',
-      })
-      .emptyLine()
-      .right('by eKirbs')
-    .emptyLine()
-    .render()
-  );
-
+// LOGO & MAIN MENU CALL
+function init() {
+  const logoDisplay = 
+  logo({
+    name: 'SQL EMPLOYEE TRACKER!!',
+    font: 'Doom',
+    lineChars: 10,
+    padding: 2,
+    margin: 3,
+    borderColor: 'yellow',
+    logoColor: 'bold-cyan',
+    textColor: 'bold-green',
+  })
+  .emptyLine()
+  .right('by eKirbs')
+  .emptyLine()
+  .render();
+  
+  console.log(logoDisplay);
+  
   mainMenu();
-});
+};
 
 // MAIN MENU
-const mainMenu = () => {
-  inquirer.prompt({
-    type: "list",
-    message: "Choose an activity.",
-    name: "main",
-    choices: [
-      "View All Employees",
-      "Add Employee",
-      "Update Employee Role",
-      "View All Roles",
-      "Add Role",
-      "View All Departments",
-      "Add Department",
-      "Quit"
-    ]
-  })
-  .then((answer) => {
+function mainMenu() {
+  prompt([
+    {
+      type: "list",
+      message: "What would you like to do?",
+      name: "main",
+      choices: [
+        {
+          name: "View All Employees",
+          value: "VIEW_EMPS"
+        },
+        {
+          name: "Add Employee",
+          value: "ADD_EMP"
+        },
+        {
+          name: "Update Employee Role",
+          value: "UPDATE_ROLE"
+        },
+        {
+          name: "View All Roles",
+          value: "VIEW_ROLES"
+        },
+        {
+          name: "Add Role",
+          value: "ADD_ROLE"
+        },
+        {
+          name: "View All Departments",
+          value: "VIEW_DEPTS"
+        },
+        {
+          name: "Add Department",
+          value: "ADD_DEPT"
+        },
+        {
+          name: "Quit",
+          value: "QUIT"
+        }      
+      ]
+    }
+  ]).then((answer) => {
     switch (answer.main) {
-      case "View All Employees":
-        viewEmployees();
+      case "VIEW_EMPS":
+        viewAllEmployees();
         break;
-
-      case "Add Employee":
-        addEmployee();
+      case "ADD_EMP":
+        addNewEmployee();
         break;
-
-      case "Update Employee Role":
-        updateRole();
+      case "UPDATE_ROLE":
+        updateEmpRole();
         break;
-
-      case "View All Roles":
-        viewRoles();
+      case "VIEW_ROLES":
+        viewAllRoles();
         break;
-
-      case "Add Role":
-        addRole();
+      case "ADD_ROLE":
+        addNewRole();
         break;
-
-      case "View All Departments":
-        viewDepartments();
+      case "VIEW_DEPTS":
+        viewAllDepartments();
         break;
-
-      case "Add Department":
-        addDepartment();
+      case "ADD_DEPT":
+        addNewDepartment();
         break;
-
-      case "Quit":
-        db.end();
-        break;
+      default:
+        quit();
     }
   })
 };
 
 // VIEW ALL EMPLOYEES
-const viewEmployees = () => {
-  const emp = `SELECT employee.id AS "ID",
-  employee.first_name AS "First Name",
-  employee.last_name AS "Last Name",
-  role.title AS "Title",
-  department.name AS "Department",
-  role.salary AS "Salary",
-  CONCAT (manager.first_name," ", manager.last_name) AS "Manager"
-  FROM employee
-  LEFT JOIN role
-  ON employee.role_id = role.id
-  LEFT JOIN department
-  ON role.department_id = department.id
-  LEFT JOIN employee manager
-  ON manager.id = employee.manager_id`;
-
-  db.query(emp, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    mainMenu();
-  });
+function viewAllEmployees() {
+  connection.viewEmployees()
+    .then(([rows]) => {
+      let employees = rows;
+      console.log("\n");
+      console.table(employees);
+    })
+    .then(() => mainMenu());
 };
 
 // ADD EMPLOYEE
-const addEmployee = () => {
-  inquirer.prompt([
+function addNewEmployee() {
+
+  // const roles = connection.viewRoleTitle();
+
+  // const managers = connection.viewManager();
+
+  prompt([
     {
       type: "input",
       message: "Enter the new Employee's first name.",
@@ -142,23 +138,17 @@ const addEmployee = () => {
       name: "newManager"
     }
   ])
-  .then(answer => {
-    const newEmp = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-    VALUES (?, ?, ?, ?)`;
-    const params = [answer.newFirstName, answer.newLastName, answer.newRole, answer.newManager];
-
-    db.query(newEmp, params, (err, res) => {
-      if (err) throw err;
-      console.log("New employee added.");
-      console.table(res);
-      mainMenu();
-    })
-  });
+  .then(res => {
+    let employee = res;
+    connection.addEmployee(employee)
+      .then(() => console.log(`Added ${employee.newFirstName} to the database.`))
+      .then(() => mainMenu())
+  })
 };
 
 // UPDATE EMPLOYEE ROLE
-const updateRole = () => {
-  inquirer.prompt([
+function updateEmpRole() {
+  prompt([
     {
       type: "number",
       message: "Enter the ID # of the employee who's role would you like to update.",
@@ -170,40 +160,29 @@ const updateRole = () => {
       name: "empRole"
     }
   ])
-  .then(answer => {
-    const updateRole = `UPDATE employee
-    SET role_id = ?
-    WHERE id = ?`;
-    const params = [answer.empRole, answer.empToChange];
-
-    db.query(updateRole, params, (err, res) => {
-      if (err) throw err;
-      console.log("Employee role update.");
-      console.table(res);
-      mainMenu();
-    })
-  });
+  .then(res => {
+    let role = res;
+    connection.updateRole(role)
+      .then(() => console.log(`Updated role of employee ${role.empToChange} the database.`))
+      .then(() => mainMenu())
+  })
 };
 
 // VIEW ALL ROLES
-const viewRoles = () => {
-  const role = `SELECT role.id AS "ID",
-  role.title AS "Title",
-  department.name AS "Department",
-  role.salary AS "Salary"
-  FROM role
-  JOIN department ON department.id = role.department_id`;
-
-  db.query(role, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    mainMenu();
-  });
+function viewAllRoles() {
+  connection.viewRoles()
+    .then(([rows]) => {
+      let roles = rows;
+      console.log("\n");
+      console.table(roles);
+    })
+    .then(() => mainMenu());
 };
 
 // ADD ROLE
-const addRole = () => {
-  inquirer.prompt([
+function addNewRole() {
+
+  prompt([
     {
       type: "input",
       message: "Enter the title of the new role.",
@@ -220,52 +199,47 @@ const addRole = () => {
       name: "dept"
     }
   ])
-  .then(answer => {
-    const newRole = `INSERT INTO role (title, salary, department_id)
-    VALUES (?, ?, ?)`;
-    const params = [answer.newTitle, answer.newSalary, answer.dept];
-
-    db.query(newRole, params, (err, res) => {
-      if (err) throw err;
-      console.log("New role added.");
-      console.table(res);
-      mainMenu();
-    })
-  });
+  .then(res => {
+    let role = res;
+    connection.addRole(role)
+      .then(() => console.log(`Added ${role.newTitle} to the database.`))
+      .then(() => mainMenu())
+  })
 };
 
 // VIEW ALL DEPARTMENTS
-const viewDepartments = () => {
-  const dep = `SELECT department.id AS "ID",
-  department.name AS "Department"
-   FROM department`;
-
-  db.query(dep, (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    mainMenu();
-  });
+function viewAllDepartments() {
+  connection.viewDepartments()
+    .then(([rows]) => {
+      let departments = rows;
+      console.log("\n");
+      console.table(departments);
+    })
+    .then(() => mainMenu());
 };
 
 // ADD DEPARTMENT
-const addDepartment = () => {
-  inquirer.prompt([
+function addNewDepartment() {
+  prompt([
     {
       type: "input",
       message: "Enter the name of the new department.",
       name: "newDeptName"
     }
   ])
-  .then(answer => {
-    const newDept = `INSERT INTO department (name)
-    VALUES (?)`
-    const params = [answer.newDeptName];
-
-    db.query(newDept, params, (err, res) => {
-      if (err) throw err;
-      console.log("New department added.");
-      console.table(res);
-      mainMenu();
-    })
-  });
+  .then(res => {
+    let department = res;
+    connection.addDepartment(department)
+      .then(() => console.log(`Added ${department.newDeptName} to the database.`))
+      .then(() => mainMenu())
+  })
 };
+
+// QUIT
+function quit() {
+  console.log("Goodbye!!");
+  process.exit();
+}
+
+// INITIALIZE FUNCTION
+init();
