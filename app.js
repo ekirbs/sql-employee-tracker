@@ -68,12 +68,20 @@ function mainMenu() {
           value: "ADD_ROLE"
         },
         {
+          name: "Delete Role",
+          value: "DELETE_ROLE"
+        },
+        {
           name: "View All Departments",
           value: "VIEW_DEPTS"
         },
         {
           name: "Add Department",
           value: "ADD_DEPT"
+        },
+        {
+          name: "Delete Department",
+          value: "DELETE_DEPT"
         },
         {
           name: "Quit",
@@ -98,7 +106,7 @@ function mainMenu() {
       case "UPDATE_MNGR":
         updateEmpMngr();
         break;
-        case "DELETE_EMP":
+      case "DELETE_EMP":
         deleteEmp();
         break;
       case "VIEW_ROLES":
@@ -107,12 +115,18 @@ function mainMenu() {
       case "ADD_ROLE":
         addNewRole();
         break;
+      case "DELETE_ROLE":
+        deleteEmpRole();
+        break;
       case "VIEW_DEPTS":
         viewAllDepartments();
         break;
       case "ADD_DEPT":
         addNewDepartment();
         break;
+      case "DELETE_DEPT":
+          deleteEmpDept();
+          break;
       default:
         quit();
     }
@@ -278,6 +292,23 @@ function addNewRole() {
   })
 };
 
+// DELETE ROLE
+function deleteEmpRole() {
+  prompt([
+    {
+      type: "number",
+      message: "Enter the ID # of the role you'd like to delete.",
+      name: "roleToDelete"
+    }
+  ])
+  .then(res => {
+    let role = res;
+    connection.deleteRole(role)
+      .then(() => console.log(`Deleted role ${role.id} from the database.`))
+      .then(() => mainMenu())
+  })
+};
+
 // VIEW ALL DEPARTMENTS
 function viewAllDepartments() {
   connection.viewDepartments()
@@ -302,6 +333,23 @@ function addNewDepartment() {
     let department = res;
     connection.addDepartment(department)
       .then(() => console.log(`Added ${department.newDeptName} to the database.`))
+      .then(() => mainMenu())
+  })
+};
+
+// DELETE DEPARTMENT
+function deleteEmpDept() {
+  prompt([
+    {
+      type: "number",
+      message: "Enter the ID # of the department you'd like to delete.",
+      name: "deptToDelete"
+    }
+  ])
+  .then(res => {
+    let role = res;
+    connection.deleteDept(dept)
+      .then(() => console.log(`Deleted department ${role.id} from the database.`))
       .then(() => mainMenu())
   })
 };

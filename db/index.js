@@ -107,6 +107,20 @@ class companyDatabase {
     );
   };
 
+  deleteRole(role) {
+    return this.connection.promise().query(
+      `DELETE FROM role
+      WHERE id = ?`, role.roleToDelete
+    );
+  };
+
+  deleteDept(dept) {
+    return this.connection.promise().query(
+      `DELETE FROM department
+      WHERE id = ?`, dept.deptToDelete
+    );
+  };
+
 };
 
 module.exports = new companyDatabase(connection);

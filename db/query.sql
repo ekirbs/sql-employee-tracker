@@ -62,17 +62,19 @@ department.name AS "Department"
 INSERT INTO department (name)
 VALUES (?);
 
+-- DELETE EMPLOYEE
+DELETE FROM employee
+WHERE id = ?;
+
+-- DELETE ROLE
+DELETE FROM role
+WHERE id = ?;
+
+-- DELETE DEPARTMENT
+DELETE FROM department
+WHERE id = ?;
 
 
 -- WIP
 SELECT role.title
 FROM role;
-
-DELETE FROM employee
-WHERE id = ?;
-
-DELETE FROM department
-WHERE id = ?;
-
-DELETE FROM role
-WHERE id = ?;
