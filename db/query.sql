@@ -41,6 +41,10 @@ UPDATE employee
 SET manager_id = ?
 WHERE id = ?;
 
+-- DELETE EMPLOYEE
+DELETE FROM employee
+WHERE id = ?;
+
 -- VIEW ALL ROLES
 SELECT role.id AS "ID",
 role.title AS "Title",
@@ -53,6 +57,10 @@ JOIN department ON department.id = role.department_id;
 INSERT INTO role (title, salary, department_id)
 VALUES (?, ?, ?);
 
+-- DELETE ROLE
+DELETE FROM role
+WHERE id = ?;
+
 -- VIEW ALL DEPARTMENTS
 SELECT department.id AS "ID",
 department.name AS "Department"
@@ -62,17 +70,10 @@ department.name AS "Department"
 INSERT INTO department (name)
 VALUES (?);
 
--- DELETE EMPLOYEE
-DELETE FROM employee
-WHERE id = ?;
-
--- DELETE ROLE
-DELETE FROM role
-WHERE id = ?;
-
 -- DELETE DEPARTMENT
 DELETE FROM department
 WHERE id = ?;
+
 
 
 -- WIP

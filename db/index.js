@@ -41,7 +41,37 @@ class companyDatabase {
       WHERE employee.manager_id IS NULL;`
     );
   };
+  
+  addEmployee(employee) {
+    return this.connection.promise().query(
+      `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+      VALUES (?, ?, ?, ?)`, [employee.newFirstName, employee.newLastName, employee.newRole, employee.newManager]
+    );
+  };
 
+  updateRole(role) {
+    return this.connection.promise().query(
+      `UPDATE employee
+      SET role_id = ?
+      WHERE id = ?`, [role.empRole, role.empToChange]
+    );
+  };
+
+  updateMngr(mngr) {
+    return this.connection.promise().query(
+      `UPDATE employee
+      SET manager_id = ?
+      WHERE id = ?`, [mngr.empMngr, mngr.empToChange]
+    );
+  };
+
+  deleteEmployee(employee) {
+    return this.connection.promise().query(
+      `DELETE FROM employee
+      WHERE id = ?`, employee.empToDelete
+    );
+  };
+    
   viewRoles() {
     return this.connection.promise().query(
       `SELECT role.id AS "ID",
@@ -50,6 +80,20 @@ class companyDatabase {
       role.salary AS "Salary"
       FROM role
       JOIN department ON department.id = role.department_id;`
+    );
+  };
+    
+  addRole(role) {
+    return this.connection.promise().query(
+      `INSERT INTO role (title, salary, department_id)
+      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.dept]
+    );
+  };
+
+  deleteRole(role) {
+    return this.connection.promise().query(
+      `DELETE FROM role
+      WHERE id = ?`, role.roleToDelete
     );
   };
 
@@ -61,66 +105,27 @@ class companyDatabase {
     );
   };
 
-  addEmployee(employee) {
-    return this.connection.promise().query(
-      `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-      VALUES (?, ?, ?, ?)`, [employee.newFirstName, employee.newLastName, employee.newRole, employee.newManager]);
-  };
-
-  addRole(role) {
-    return this.connection.promise().query(
-      `INSERT INTO role (title, salary, department_id)
-      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.dept]);
-  };
-
   addDepartment(department) {
     return this.connection.promise().query(
       `INSERT INTO department (name)
-      VALUES (?);`, department.newDeptName);
-  };
-
-  updateRole(role) {
-    return this.connection.promise().query(
-      `UPDATE employee
-      SET role_id = ?
-      WHERE id = ?`, [role.empRole, role.empToChange]);
-  };
-
-  updateMngr(mngr) {
-    return this.connection.promise().query(
-      `UPDATE employee
-      SET manager_id = ?
-      WHERE id = ?`, [mngr.empMngr, mngr.empToChange]);
-  };
-
-  viewRoleTitle() {
-    return this.connection.promise().query(
-      `SELECT role.title
-      FROM role;`
+      VALUES (?);`, department.newDeptName
     );
   };
-
-  deleteEmployee(employee) {
-    return this.connection.promise().query(
-      `DELETE FROM employee
-      WHERE id = ?`, employee.empToDelete
-    );
-  };
-
-  deleteRole(role) {
-    return this.connection.promise().query(
-      `DELETE FROM role
-      WHERE id = ?`, role.roleToDelete
-    );
-  };
-
+      
   deleteDept(dept) {
     return this.connection.promise().query(
       `DELETE FROM department
       WHERE id = ?`, dept.deptToDelete
     );
   };
-
+          
+  viewRoleTitle() {
+    return this.connection.promise().query(
+      `SELECT role.title
+      FROM role;`
+    );
+  };
+  
 };
-
+        
 module.exports = new companyDatabase(connection);
