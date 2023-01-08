@@ -52,6 +52,10 @@ function mainMenu() {
           value: "UPDATE_ROLE"
         },
         {
+          name: "Update Employee Manager",
+          value: "UPDATE_MNGR"
+        },
+        {
           name: "Delete Employee",
           value: "DELETE_EMP"
         },
@@ -90,6 +94,9 @@ function mainMenu() {
         break;
       case "UPDATE_ROLE":
         updateEmpRole();
+        break;
+      case "UPDATE_MNGR":
+        updateEmpMngr();
         break;
         case "DELETE_EMP":
         deleteEmp();
@@ -189,6 +196,28 @@ function updateEmpRole() {
     let role = res;
     connection.updateRole(role)
       .then(() => console.log(`Updated role of employee ${role.empToChange} the database.`))
+      .then(() => mainMenu())
+  })
+};
+
+// UPDATE EMPLOYEE MANAGER
+function updateEmpMngr() {
+  prompt([
+    {
+      type: "number",
+      message: "Enter the ID # of the employee who's manager would you like to update.",
+      name: "empToChange"
+    },
+    {
+      type: "number",
+      message: "Enter the manager ID # you'd like to assign to the selected employee.",
+      name: "empMngr"
+    }
+  ])
+  .then(res => {
+    let mngr = res;
+    connection.updateMngr(mngr)
+      .then(() => console.log(`Updated manager of employee ${mngr.empToChange} the database.`))
       .then(() => mainMenu())
   })
 };

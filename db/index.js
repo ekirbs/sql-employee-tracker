@@ -86,7 +86,12 @@ class companyDatabase {
       WHERE id = ?`, [role.empRole, role.empToChange]);
   };
 
-  
+  updateMngr(mngr) {
+    return this.connection.promise().query(
+      `UPDATE employee
+      SET manager_id = ?
+      WHERE id = ?`, [mngr.empMngr, mngr.empToChange]);
+  };
 
   viewRoleTitle() {
     return this.connection.promise().query(

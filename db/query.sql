@@ -36,6 +36,11 @@ UPDATE employee
 SET role_id = ?
 WHERE id = ?;
 
+-- UPDATE EMPLOYEE MANAGER
+UPDATE employee
+SET manager_id = ?
+WHERE id = ?;
+
 -- VIEW ALL ROLES
 SELECT role.id AS "ID",
 role.title AS "Title",
