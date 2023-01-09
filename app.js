@@ -1,6 +1,6 @@
 // DEPENDENCIES
 const { prompt } = require("inquirer");
-const logo = require('asciiart-logo');
+const logo = require("asciiart-logo");
 const connection = require("./db/index.js");
 require("console.table");
 
