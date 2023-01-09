@@ -5,8 +5,9 @@ const connection = require('./connection.js');
 class companyDatabase {
   constructor(connection) {
     this.connection = connection;
-  }
+  };
 
+  // VIEW ALL EMPLOYEES
   viewEmployees() {
     return this.connection.promise().query(
       `SELECT employee.id AS "ID",
@@ -26,6 +27,7 @@ class companyDatabase {
     );
   };
 
+  // VIEW ALL MANAGERS
   viewManagers() {
     return this.connection.promise().query(
       `SELECT employee.id AS "ID",
@@ -42,6 +44,7 @@ class companyDatabase {
     );
   };
   
+  // ADD EMPLOYEE
   addEmployee(employee) {
     return this.connection.promise().query(
       `INSERT INTO employee (first_name, last_name, role_id, manager_id)
@@ -49,6 +52,7 @@ class companyDatabase {
     );
   };
 
+  // UPDATE EMPLOYEE ROLE
   updateRole(role) {
     return this.connection.promise().query(
       `UPDATE employee
@@ -57,6 +61,7 @@ class companyDatabase {
     );
   };
 
+  // UPDATE EMPLOYEE MANAGER
   updateMngr(mngr) {
     return this.connection.promise().query(
       `UPDATE employee
@@ -65,6 +70,7 @@ class companyDatabase {
     );
   };
 
+  // DELETE EMPLOYEE
   deleteEmployee(employee) {
     return this.connection.promise().query(
       `DELETE FROM employee
@@ -72,6 +78,7 @@ class companyDatabase {
     );
   };
     
+  // VIEW ALL ROLES
   viewRoles() {
     return this.connection.promise().query(
       `SELECT role.id AS "ID",
@@ -83,13 +90,15 @@ class companyDatabase {
     );
   };
     
+  // ADD ROLE
   addRole(role) {
     return this.connection.promise().query(
       `INSERT INTO role (title, salary, department_id)
-      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.dept]
+      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.newDept]
     );
   };
 
+  // DELETE ROLE
   deleteRole(role) {
     return this.connection.promise().query(
       `DELETE FROM role
@@ -97,6 +106,7 @@ class companyDatabase {
     );
   };
 
+  // VIEW ALL DEPARTMENTS
   viewDepartments() {
     return this.connection.promise().query(
       `SELECT department.id AS "ID",
@@ -105,6 +115,7 @@ class companyDatabase {
     );
   };
 
+  // ADD DEPARTMENT
   addDepartment(department) {
     return this.connection.promise().query(
       `INSERT INTO department (name)
@@ -112,6 +123,7 @@ class companyDatabase {
     );
   };
       
+  // DELETE DEPARTMENT
   deleteDept(dept) {
     return this.connection.promise().query(
       `DELETE FROM department
@@ -119,13 +131,21 @@ class companyDatabase {
     );
   };
           
+  // INTER-FUNCTION QUERIES
   viewRoleTitle() {
     return this.connection.promise().query(
       `SELECT role.title
       FROM role;`
     );
   };
-  
+
+  viewDeptName() {
+    return this.connection.promise().query(
+      `SELECT *
+      FROM department;`
+    );
+  };
+
 };
         
 module.exports = new companyDatabase(connection);

@@ -144,7 +144,7 @@ function viewAllEmployees() {
     .then(() => mainMenu());
 };
 
-// VIEW ALL EMPLOYEES
+// VIEW ALL MANAGERS
 function viewAllManagers() {
   connection.viewManagers()
     .then(([rows]) => {
@@ -248,7 +248,7 @@ function deleteEmp() {
   .then(res => {
     let employee = res;
     connection.deleteEmployee(employee)
-      .then(() => console.log(`Deleted employee ${employee.id} from the database.`))
+      .then(() => console.log(`Deleted employee ${employee.empToDelete} from the database.`))
       .then(() => mainMenu())
   })
 };
@@ -266,7 +266,6 @@ function viewAllRoles() {
 
 // ADD ROLE
 function addNewRole() {
-
   prompt([
     {
       type: "input",
@@ -280,15 +279,15 @@ function addNewRole() {
     },
     {
       type: "number",
-      message: "Enter the department ID # that the new role belongs to.",
-      name: "dept"
+      message: "Choose the department ID that the new role belongs to.",
+      name: "newDept"
     }
   ])
   .then(res => {
     let role = res;
     connection.addRole(role)
-      .then(() => console.log(`Added ${role.newTitle} to the database.`))
-      .then(() => mainMenu())
+    .then(() => console.log(`Added ${role.newTitle} to the database.`))
+    .then(() => mainMenu())
   })
 };
 
@@ -304,7 +303,7 @@ function deleteEmpRole() {
   .then(res => {
     let role = res;
     connection.deleteRole(role)
-      .then(() => console.log(`Deleted role ${role.id} from the database.`))
+      .then(() => console.log(`Deleted role ${role.roleToDelete} from the database.`))
       .then(() => mainMenu())
   })
 };
@@ -347,9 +346,9 @@ function deleteEmpDept() {
     }
   ])
   .then(res => {
-    let role = res;
+    let dept = res;
     connection.deleteDept(dept)
-      .then(() => console.log(`Deleted department ${role.id} from the database.`))
+      .then(() => console.log(`Deleted department ${dept.deptToDelete} from the database.`))
       .then(() => mainMenu())
   })
 };
@@ -362,3 +361,42 @@ function quit() {
 
 // INITIALIZE FUNCTION
 init();
+
+
+// EXP ADD ROLE
+// function addNewRole() {
+//   connection.viewDeptName()
+//   .then(([rows]) => {
+//     let departments = rows;
+//     console.log(departments);
+//     prompt([
+//       {
+//         type: "input",
+//         message: "Enter the title of the new role.",
+//         name: "newTitle"
+//       },
+//       {
+//         type: "number",
+//         message: "Enter the salary of the new role.",
+//         name: "newSalary"
+//       },
+//       {
+//         type: "list",
+//         message: "Choose the department that the new role belongs to.",
+//         name: "dept",
+//         choices: () => departments.map((department) => {
+//           return {
+//             value: department.id,
+//             name: department.name
+//           }
+//         })
+//       }
+//     ])
+//   })
+//   .then(res => {
+//     let role = res;
+//     connection.addRole(role)
+//     .then(() => console.log(`Added ${role.newTitle} to the database.`))
+//     .then(() => mainMenu())
+//   })
+// };

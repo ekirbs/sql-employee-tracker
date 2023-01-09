@@ -15,11 +15,15 @@ Link: [MySQL Employee Tracker](https://github.com/ekirbs/sql-employee-tracker 'A
 
 ## Installation
 
+Requires the use of Node Package Manager.
+
 * Uses the [Inquirer package](https://www.npmjs.com/package/inquirer/v/8.2.4).
 
 * Uses the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database.
 
 * Uses the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
+
+* Uses the [asciiart-logo package](https://www.npmjs.com/package/asciiart-logo) to display an ASCII Art digital logo.
 
 ## Usage
 

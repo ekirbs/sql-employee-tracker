@@ -79,3 +79,6 @@ WHERE id = ?;
 -- WIP
 SELECT role.title
 FROM role;
+
+SELECT department.name
+FROM department;
