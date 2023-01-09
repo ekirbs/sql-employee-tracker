@@ -1,8 +1,6 @@
 -- VIEW ALL EMPLOYEES
 SELECT employee.id AS "ID",
 CONCAT (employee.first_name," ", employee.last_name) AS "Employee",
--- employee.first_name AS "First Name",
--- employee.last_name AS "Last Name",
 role.title AS "Title",
 department.name AS "Department",
 role.salary AS "Salary",
@@ -75,9 +73,7 @@ VALUES (?);
 DELETE FROM department
 WHERE id = ?;
 
-
-
--- INTER-FUNCTION QUERIES
+-- VIEW EMPLOYEES TO EDIT
 SELECT employee.id,
 CONCAT (employee.first_name," ", employee.last_name) AS "name",
 employee.manager_id,
@@ -90,12 +86,10 @@ ON role.id = employee.role_id
 LEFT JOIN employee manager
 ON manager.id = employee.manager_id;
 
-SELECT employee.id,
-CONCAT (employee.first_name," ", employee.last_name) AS "name"
-FROM employee;
-
+-- VIEW ROLES TO EDIT
 SELECT role.id, role.title
 FROM role;
 
+-- VIEW DEPARTMENTS TO EDIT
 SELECT *
 FROM department;
