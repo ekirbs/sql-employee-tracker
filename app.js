@@ -157,94 +157,145 @@ function viewAllManagers() {
 
 // ADD EMPLOYEE
 function addNewEmployee() {
-  prompt([
-    {
-      type: "input",
-      message: "Enter the new Employee's first name.",
-      name: "newFirstName"
-    },
-    {
-      type: "input",
-      message: "Enter the new Employee's last name.",
-      name: "newLastName"
-    },
-    {
-      type: "number",
-      message: "Enter the new Employee's role ID #.",
-      name: "newRole"
-    },
-    {
-      type: "number",
-      message: "Enter the new Employee's Manager ID #.",
-      name: "newManager"
-    }
-  ])
-  .then(res => {
-    let employee = res;
-    connection.addEmployee(employee)
+  connection.viewEmpsToEdit()
+  .then(([rows]) => {
+    let employees = rows;
+    // console.log(employees);
+    const roleChoices = employees.map(({ role_id, title }) => ({
+      value: role_id,
+      name: title
+    }));
+    const managerChoices = employees.map(({ manager_id, manager_name }) => ({
+      value: manager_id,
+      name: manager_name
+    }));
+    prompt([
+      {
+        type: "input",
+        message: "Enter the new Employee's first name.",
+        name: "newFirstName"
+      },
+      {
+        type: "input",
+        message: "Enter the new Employee's last name.",
+        name: "newLastName"
+      },
+      {
+        type: "list",
+        message: "Choose the employee's role.",
+        name: "newRole",
+        choices: roleChoices
+      },
+      {
+        type: "list",
+        message: "Choose the new employee's manager.",
+        name: "newManager",
+        choices: managerChoices
+      }
+    ])
+    .then(employee => {
+      connection.addEmployee(employee)
       .then(() => console.log(`Added ${employee.newFirstName} to the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
 // UPDATE EMPLOYEE ROLE
 function updateEmpRole() {
-  prompt([
-    {
-      type: "number",
-      message: "Enter the ID # of the employee who's role would you like to update.",
-      name: "empToChange"
-    },
-    {
-      type: "number",
-      message: "Enter the role ID # you'd like to assign to the selected employee.",
-      name: "empRole"
-    }
-  ])
-  .then(res => {
-    let role = res;
-    connection.updateRole(role)
-      .then(() => console.log(`Updated role of employee ${role.empToChange} the database.`))
+  connection.viewEmpsToEdit()
+  .then(([rows]) => {
+    let employees = rows;
+    // console.log(employees);
+    const employeeChoices = employees.map(({ id, name }) => ({
+      value: id,
+      name: name
+    }));
+    const roleChoices = employees.map(({ role_id, title }) => ({
+      value: role_id,
+      name: title
+    }));
+    prompt([
+      {
+        type: "list",
+        message: "Choose the employee would you like to update.",
+        name: "empToChange",
+        choices: employeeChoices
+      },
+      {
+        type: "list",
+        message: "Choose the role you'd like to assign to the selected employee.",
+        name: "empRole",
+        choices: roleChoices
+      }
+    ])
+    .then(role => {
+      connection.updateRole(role)
+      .then(() => console.log(`Updated manager of employee ${role.empToChange} in the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
 // UPDATE EMPLOYEE MANAGER
 function updateEmpMngr() {
-  prompt([
-    {
-      type: "number",
-      message: "Enter the ID # of the employee who's manager would you like to update.",
-      name: "empToChange"
-    },
-    {
-      type: "number",
-      message: "Enter the manager ID # you'd like to assign to the selected employee.",
-      name: "empMngr"
-    }
-  ])
-  .then(res => {
-    let mngr = res;
-    connection.updateMngr(mngr)
-      .then(() => console.log(`Updated manager of employee ${mngr.empToChange} the database.`))
+  connection.viewEmpsToEdit()
+  .then(([rows]) => {
+    let employees = rows;
+    // console.log(employees);
+    const employeeChoices = employees.map(({ id, name }) => ({
+      value: id,
+      name: name
+    }));
+    const managerChoices = employees.map(({ manager_id, manager_name }) => ({
+      value: manager_id,
+      name: manager_name
+    }));
+    prompt([
+      {
+        type: "list",
+        message: "Choose the employee would you like to update.",
+        name: "empToChange",
+        choices: employeeChoices
+      },
+      {
+        type: "list",
+        message: "Choose the manager you'd like to assign to the selected employee.",
+        name: "empMngr",
+        choices: managerChoices
+      }
+    ])
+    .then(mngr => {
+      connection.updateMngr(mngr)
+      .then(() => console.log(`Updated manager of employee ${mngr.empToChange} in the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
 // DELETE EMPLOYEE
 function deleteEmp() {
-  prompt([
-    {
-      type: "number",
-      message: "Enter the ID # of the employee you'd like to delete.",
-      name: "empToDelete"
-    }
-  ])
-  .then(res => {
-    let employee = res;
-    connection.deleteEmployee(employee)
+  connection.viewEmpsToEdit()
+  .then(([rows]) => {
+    let employees = rows;
+    // console.log(employees);
+    const employeeChoices = employees.map(({ id, name }) => ({
+      value: id,
+      name: name
+    }));
+    prompt([
+      {
+        type: "list",
+        message: "Choose the employee you'd like to remove from the database.",
+        name: "empToDelete",
+        choices: employeeChoices
+      }
+    ])
+    .then(employee => {
+      connection.deleteEmployee(employee)
       .then(() => console.log(`Deleted employee ${employee.empToDelete} from the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
@@ -261,45 +312,63 @@ function viewAllRoles() {
 
 // ADD ROLE
 function addNewRole() {
-  prompt([
-    {
-      type: "input",
-      message: "Enter the title of the new role.",
-      name: "newTitle"
-    },
-    {
-      type: "number",
-      message: "Enter the salary of the new role.",
-      name: "newSalary"
-    },
-    {
-      type: "number",
-      message: "Choose the department ID that the new role belongs to.",
-      name: "newDept"
-    }
-  ])
-  .then(res => {
-    let role = res;
-    connection.addRole(role)
-    .then(() => console.log(`Added ${role.newTitle} to the database.`))
-    .then(() => mainMenu())
+  connection.viewDeptName()
+  .then(([rows]) => {
+    let departments = rows;
+    // console.log(departments);
+    const departmentChoices = departments.map(({ id, name }) => ({
+      value: id,
+      name: name
+    }));
+    prompt([
+      {
+        type: "input",
+        message: "Enter the title of the new role.",
+        name: "newTitle"
+      },
+      {
+        type: "number",
+        message: "Enter the salary of the new role.",
+        name: "newSalary"
+      },
+      {
+        type: "list",
+        message: "Choose the department that the new role belongs to.",
+        name: "dept",
+        choices: departmentChoices
+      }
+    ])
+    .then(role => {
+      connection.addRole(role)
+      .then(() => console.log(`Added ${role.dept} to the database.`))
+      .then(() => mainMenu())
+    })
   })
 };
 
 // DELETE ROLE
 function deleteEmpRole() {
-  prompt([
-    {
-      type: "number",
-      message: "Enter the ID # of the role you'd like to delete.",
-      name: "roleToDelete"
-    }
-  ])
-  .then(res => {
-    let role = res;
-    connection.deleteRole(role)
+  connection.viewRoleTitle()
+  .then(([rows]) => {
+    let roles = rows;
+    // console.log(roles);
+    const roleChoices = roles.map(({ id, title }) => ({
+      value: id,
+      name: title
+    }));
+    prompt([
+      {
+        type: "list",
+        message: "Choose the role you'd like to delete.",
+        name: "roleToDelete",
+        choices: roleChoices
+      }
+    ])
+    .then(role => {
+      connection.deleteRole(role)
       .then(() => console.log(`Deleted role ${role.roleToDelete} from the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
@@ -333,18 +402,27 @@ function addNewDepartment() {
 
 // DELETE DEPARTMENT
 function deleteEmpDept() {
-  prompt([
-    {
-      type: "number",
-      message: "Enter the ID # of the department you'd like to delete.",
-      name: "deptToDelete"
-    }
-  ])
-  .then(res => {
-    let dept = res;
-    connection.deleteDept(dept)
+  connection.viewDeptName()
+  .then(([rows]) => {
+    let departments = rows;
+    // console.log(departments);
+    const departmentChoices = departments.map(({ id, name }) => ({
+      value: id,
+      name: name
+    }));
+    prompt([
+      {
+        type: "list",
+        message: "Choose the department you'd like to delete.",
+        name: "deptToDelete",
+        choices: departmentChoices
+      }
+    ])
+    .then(dept => {
+      connection.deleteDept(dept)
       .then(() => console.log(`Deleted department ${dept.deptToDelete} from the database.`))
       .then(() => mainMenu())
+    })
   })
 };
 
@@ -356,42 +434,3 @@ function quit() {
 
 // INITIALIZE FUNCTION
 init();
-
-
-// EXP ADD ROLE
-// function addNewRole() {
-//   connection.viewDeptName()
-//   .then(([rows]) => {
-//     let departments = rows;
-//     console.log(departments);
-//     prompt([
-//       {
-//         type: "input",
-//         message: "Enter the title of the new role.",
-//         name: "newTitle"
-//       },
-//       {
-//         type: "number",
-//         message: "Enter the salary of the new role.",
-//         name: "newSalary"
-//       },
-//       {
-//         type: "list",
-//         message: "Choose the department that the new role belongs to.",
-//         name: "dept",
-//         choices: () => departments.map((department) => {
-//           return {
-//             value: department.id,
-//             name: department.name
-//           }
-//         })
-//       }
-//     ])
-//   })
-//   .then(res => {
-//     let role = res;
-//     connection.addRole(role)
-//     .then(() => console.log(`Added ${role.newTitle} to the database.`))
-//     .then(() => mainMenu())
-//   })
-// };

@@ -11,8 +11,7 @@ class companyDatabase {
   viewEmployees() {
     return this.connection.promise().query(
       `SELECT employee.id AS "ID",
-      employee.first_name AS "First Name",
-      employee.last_name AS "Last Name",
+      CONCAT (employee.first_name," ", employee.last_name) AS "Employee",
       role.title AS "Title",
       department.name AS "Department",
       role.salary AS "Salary",
@@ -22,8 +21,8 @@ class companyDatabase {
       ON employee.role_id = role.id
       LEFT JOIN department
       ON role.department_id = department.id
-      LEFT JOIN employee manager
-      ON manager.id = employee.manager_id;`
+        LEFT JOIN employee manager
+        ON manager.id = employee.manager_id;`
     );
   };
 
@@ -94,7 +93,7 @@ class companyDatabase {
   addRole(role) {
     return this.connection.promise().query(
       `INSERT INTO role (title, salary, department_id)
-      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.newDept]
+      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.dept]
     );
   };
 
@@ -131,14 +130,32 @@ class companyDatabase {
     );
   };
           
-  // INTER-FUNCTION QUERIES
+  // VIEW EMPLOYEES TO EDIT
+  viewEmpsToEdit() {
+    return this.connection.promise().query(
+      `SELECT employee.id,
+      CONCAT (employee.first_name," ", employee.last_name) AS "name",
+      employee.manager_id,
+      CONCAT (manager.first_name," ", manager.last_name) AS "manager_name",
+      role.id AS "role_id",
+      role.title
+      FROM employee
+      LEFT JOIN role
+      ON role.id = employee.role_id
+      LEFT JOIN employee manager
+      ON manager.id = employee.manager_id;`
+    );
+  };
+
+  // VIEW ROLES TO EDIT
   viewRoleTitle() {
     return this.connection.promise().query(
-      `SELECT role.title
+      `SELECT role.id, role.title
       FROM role;`
     );
   };
 
+  // VIEW DEPARTMENTS TO EDIT
   viewDeptName() {
     return this.connection.promise().query(
       `SELECT *

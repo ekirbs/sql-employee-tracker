@@ -1,7 +1,8 @@
 -- VIEW ALL EMPLOYEES
 SELECT employee.id AS "ID",
-employee.first_name AS "First Name",
-employee.last_name AS "Last Name",
+CONCAT (employee.first_name," ", employee.last_name) AS "Employee",
+-- employee.first_name AS "First Name",
+-- employee.last_name AS "Last Name",
 role.title AS "Title",
 department.name AS "Department",
 role.salary AS "Salary",
@@ -76,9 +77,25 @@ WHERE id = ?;
 
 
 
--- WIP
-SELECT role.title
+-- INTER-FUNCTION QUERIES
+SELECT employee.id,
+CONCAT (employee.first_name," ", employee.last_name) AS "name",
+employee.manager_id,
+CONCAT (manager.first_name," ", manager.last_name) AS "manager_name",
+role.id AS "role_id",
+role.title
+FROM employee
+LEFT JOIN role
+ON role.id = employee.role_id
+LEFT JOIN employee manager
+ON manager.id = employee.manager_id;
+
+SELECT employee.id,
+CONCAT (employee.first_name," ", employee.last_name) AS "name"
+FROM employee;
+
+SELECT role.id, role.title
 FROM role;
 
-SELECT department.name
+SELECT *
 FROM department;
