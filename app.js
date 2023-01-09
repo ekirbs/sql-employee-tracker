@@ -157,11 +157,6 @@ function viewAllManagers() {
 
 // ADD EMPLOYEE
 function addNewEmployee() {
-
-  // const roles = connection.viewRoleTitle();
-
-  // const managers = connection.viewManager();
-
   prompt([
     {
       type: "input",
