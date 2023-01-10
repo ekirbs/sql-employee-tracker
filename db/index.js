@@ -93,7 +93,7 @@ class companyDatabase {
   addRole(role) {
     return this.connection.promise().query(
       `INSERT INTO role (title, salary, department_id)
-      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.dept]
+      VALUES (?, ?, ?);`, [role.newTitle, role.newSalary, role.newDept]
     );
   };
 
@@ -135,15 +135,11 @@ class companyDatabase {
     return this.connection.promise().query(
       `SELECT employee.id,
       CONCAT (employee.first_name," ", employee.last_name) AS "name",
-      employee.manager_id,
-      CONCAT (manager.first_name," ", manager.last_name) AS "manager_name",
       role.id AS "role_id",
       role.title
       FROM employee
-      LEFT JOIN role
-      ON role.id = employee.role_id
-      LEFT JOIN employee manager
-      ON manager.id = employee.manager_id;`
+      RIGHT JOIN role
+      ON role.id = employee.role_id;`
     );
   };
 

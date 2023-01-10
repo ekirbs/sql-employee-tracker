@@ -160,14 +160,15 @@ function addNewEmployee() {
   connection.viewEmpsToEdit()
   .then(([rows]) => {
     let employees = rows;
-    // console.log(employees);
+    // const uniqueRoles = [...new Set(employees.map((role) => role.title))];
+    // console.log(uniqueRoles);
     const roleChoices = employees.map(({ role_id, title }) => ({
       value: role_id,
       name: title
     }));
-    const managerChoices = employees.map(({ manager_id, manager_name }) => ({
-      value: manager_id,
-      name: manager_name
+    const managerChoices = employees.map(({ id, name }) => ({
+      value: id,
+      name: name
     }));
     prompt([
       {
@@ -206,7 +207,6 @@ function updateEmpRole() {
   connection.viewEmpsToEdit()
   .then(([rows]) => {
     let employees = rows;
-    // console.log(employees);
     const employeeChoices = employees.map(({ id, name }) => ({
       value: id,
       name: name
@@ -242,14 +242,13 @@ function updateEmpMngr() {
   connection.viewEmpsToEdit()
   .then(([rows]) => {
     let employees = rows;
-    // console.log(employees);
     const employeeChoices = employees.map(({ id, name }) => ({
       value: id,
       name: name
     }));
-    const managerChoices = employees.map(({ manager_id, manager_name }) => ({
-      value: manager_id,
-      name: manager_name
+    const managerChoices = employees.map(({ id, name }) => ({
+      value: id,
+      name: name
     }));
     prompt([
       {
@@ -278,7 +277,6 @@ function deleteEmp() {
   connection.viewEmpsToEdit()
   .then(([rows]) => {
     let employees = rows;
-    // console.log(employees);
     const employeeChoices = employees.map(({ id, name }) => ({
       value: id,
       name: name
@@ -315,7 +313,6 @@ function addNewRole() {
   connection.viewDeptName()
   .then(([rows]) => {
     let departments = rows;
-    // console.log(departments);
     const departmentChoices = departments.map(({ id, name }) => ({
       value: id,
       name: name
@@ -334,13 +331,13 @@ function addNewRole() {
       {
         type: "list",
         message: "Choose the department that the new role belongs to.",
-        name: "dept",
+        name: "newDept",
         choices: departmentChoices
       }
     ])
     .then(role => {
       connection.addRole(role)
-      .then(() => console.log(`Added ${role.dept} to the database.`))
+      .then(() => console.log(`Added ${role.newTitle} to the database.`))
       .then(() => mainMenu())
     })
   })
@@ -351,7 +348,6 @@ function deleteEmpRole() {
   connection.viewRoleTitle()
   .then(([rows]) => {
     let roles = rows;
-    // console.log(roles);
     const roleChoices = roles.map(({ id, title }) => ({
       value: id,
       name: title
@@ -405,7 +401,6 @@ function deleteEmpDept() {
   connection.viewDeptName()
   .then(([rows]) => {
     let departments = rows;
-    // console.log(departments);
     const departmentChoices = departments.map(({ id, name }) => ({
       value: id,
       name: name
