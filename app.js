@@ -160,8 +160,6 @@ function addNewEmployee() {
   connection.viewEmpsToEdit()
   .then(([rows]) => {
     let employees = rows;
-    // const uniqueRoles = [...new Set(employees.map((role) => role.title))];
-    // console.log(uniqueRoles);
     const roleChoices = employees.map(({ role_id, title }) => ({
       value: role_id,
       name: title
