@@ -88,6 +88,15 @@ class companyDatabase {
       JOIN department ON department.id = role.department_id;`
     );
   };
+
+  // VIEW DEPARTMENT SALARY COST
+  viewSalarySum(role) {
+    return this.connection.promise().query(
+      `UPDATE employee
+      SET manager_id = ?
+      WHERE id = ?`, [role.empMngr, role.empToChange]
+    );
+  };
     
   // ADD ROLE
   addRole(role) {

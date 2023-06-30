@@ -93,3 +93,20 @@ FROM role;
 -- VIEW DEPARTMENTS TO EDIT
 SELECT *
 FROM department;
+
+
+
+
+-- WIP
+SELECT role.title AS "Title",
+SUM(role.salary) AS "Salary"
+FROM role
+RIGHT JOIN employee
+ON role.id = ?;
+
+LEFT 
+
+SELECT DISTINCT(role.title)
+employee.id
+FROM role
+LEFT JOIN employee

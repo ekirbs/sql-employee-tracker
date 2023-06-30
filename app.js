@@ -125,8 +125,8 @@ function mainMenu() {
         addNewDepartment();
         break;
       case "DELETE_DEPT":
-          deleteEmpDept();
-          break;
+        deleteEmpDept();
+        break;
       default:
         quit();
     }
